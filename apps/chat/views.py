@@ -3,15 +3,14 @@ from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views import generic
 
-from apps.chat.forms import UserRegistrationForm, MessageCreationForm
+from apps.chat.forms import UserRegistrationForm
 from apps.chat.models import Message
 
 
-class Chat(LoginRequiredMixin, generic.CreateView):
+class Chat(LoginRequiredMixin, generic.TemplateView):
     template_name = 'chat/chat.html'
     login_url = '/login'
     redirect_field_name = 'redirect_to'
-    form_class = MessageCreationForm
 
     def get_context_data(self, **kwargs):
         context = super(Chat, self).get_context_data(**kwargs)

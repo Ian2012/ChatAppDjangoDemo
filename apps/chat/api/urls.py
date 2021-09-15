@@ -1,8 +1,9 @@
 from django.urls import path
 
-from .views import DeleteMessageAPIView
+from .views import DeleteMessageAPIView, ListCreateMessageAPIView
 
 app_name = 'chat_api'
 urlpatterns = [
     path('delete/<int:pk>', DeleteMessageAPIView.as_view(), name='delete-message'),
+    path('messages/', ListCreateMessageAPIView.as_view(), name='list-create-message'),
 ]

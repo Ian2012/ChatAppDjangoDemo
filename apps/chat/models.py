@@ -9,3 +9,7 @@ class Message(models.Model):
 
     class Meta:
         ordering = ('-timestamp',)
+
+    @property
+    def username(self):
+        return self.user.username
