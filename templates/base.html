@@ -4,6 +4,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title> {% block title %} {% endblock %} ChatApp</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 	</head>
 	<body>
 		<nav>
@@ -21,11 +22,11 @@
 		{% block content %}
 		{% endblock %}
 
-		<script src="{% static 'vue.js' %}"></script>
-		<script src="{% static 'axios.min.js' %}"></script>
+		<script src="{% static 'js/vue.js' %}"></script>
+		<script src="{% static 'js/axios.min.js' %}"></script>
 		<script>
-			axios.defaults.xsrfHeaderName = "X-CSRFToken"
-			axios.defaults.xsrfCookieName = "csrftoken"
+            axios.defaults.xsrfHeaderName = "X-CSRFToken"
+            axios.defaults.xsrfCookieName = "csrftoken"
 		</script>
 		{% block scripts %}
 		{% endblock %}

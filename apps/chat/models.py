@@ -8,7 +8,7 @@ class Message(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ('-timestamp',)
+        ordering = ('timestamp',)
 
     @property
     def username(self):

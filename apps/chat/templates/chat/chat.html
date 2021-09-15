@@ -12,14 +12,14 @@
 			<div class="message" v-for="message in messages">
 				<p>
 					<b v-if="message.username == username">Me</b>
-					<b v-else="">[[message.username]]</b>at [[message.timestamp]]
+					<b v-else="">[[message.username]]</b> at [[message.timestamp]]
 					<button v-if="message.username == username" @click="deleteMessage(message.id)">Eliminar</button>
 				</p>
 				<img :src="message.image" alt="Image here >.<" height="64">
 				<hr>
 			</div>
-			<input type="file" @change="uploadImage" name="image" id="image" accept="image/*">
 		</div>
+	<input type="file" @change="uploadImage" name="image" id="image" accept="image/*">
 	</div>
 
 	<hr>
@@ -64,15 +64,19 @@
                     axios.post('{% url 'chat_api:list-create-message' %}', fd)
                         .then(response => {
                             console.log(self.messages, response.data)
+							response.data.timestamp = new Date(response.data.timestamp).toLocaleString()
                             self.messages.push(response.data)
                         })
                 },
                 deleteMessage(id) {
-                    axios.delete('{% url 'chat_api:delete-message' %}/' + id, {
+                    let self = this;
+                    axios.delete('{% url 'chat_api:delete-message' %}', {
                         params: {detalle: id}
                     })
                         .then(response => {
-                            console.log(response)
+                            self.messages = self.messages.filter(function (value, index, arr) {
+                                return value.id != id
+                            });
                         })
                 },
             }
