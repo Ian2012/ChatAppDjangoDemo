@@ -5,6 +5,18 @@
 		<title> {% block title %} {% endblock %} ChatApp</title>
 	</head>
 	<body>
+		<nav>
+			<ul>
+				<li><a href="{% url 'chat:chat' %}">Home</a></li>
+				{% if request.user.is_authenticated %}
+					<li><a href="{% url 'chat:logout' %}">Logout</a></li>
+				{% else %}
+					<li><a href="{% url 'chat:login' %}">Login</a></li>
+					<li><a href="{% url 'chat:signup' %}">Signup</a></li>
+				{% endif %}
+
+			</ul>
+		</nav>
 		{% block content %}
 		{% endblock %}
 

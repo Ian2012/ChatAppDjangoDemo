@@ -2,6 +2,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views import generic
 
+from apps.chat.forms import UserRegistrationForm
+
 
 class Chat(LoginRequiredMixin, generic.TemplateView):
     template_name = 'chat/chat.html'
@@ -14,8 +16,10 @@ class Login(LoginView):
 
 
 class Logout(LogoutView):
-    pass
+    next_page = '/login'
 
 
-class Signup(generic.TemplateView):
+class Signup(generic.CreateView):
     template_name = 'chat/signup.html'
+    success_url = '/'
+    form_class = UserRegistrationForm
