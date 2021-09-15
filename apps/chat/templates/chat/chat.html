@@ -15,9 +15,7 @@
 				<img :src="message.image" alt="Image here >.<" height="64">
 				<hr>
 			</div>
-			<!--TODO Enviar la imagen y crear la lógica para añadir un mensaje
-			<input type="file" name="image" id="image" accept="image/*">
-			<button type="submit" @click="submit"> Submit</button>-->
+			<input type="file" @change="uploadImage" name="image" id="image" accept="image/*">
 		</div>
 	</div>
 
@@ -37,6 +35,7 @@
                 return {
                     messages: {},
                     username: '{{ request.user.username }}',
+                    user: {{ request.user.id }}
                 }
             },
             mounted() {
@@ -48,11 +47,21 @@
                     axios.get('{% url 'chat_api:list-create-message' %}')
                         .then(function (response) {
                             self.messages = response.data
-                            console.log(self.messages)
                             self.messages.forEach(function (value, index) {
-                                console.log("En el índice " + index + " hay este valor: " + value);
                                 self.messages[index].timestamp = new Date(self.messages[index].timestamp).toLocaleString()
                             });
+                        })
+                },
+                uploadImage(e) {
+                    let img = e.target.files[0]
+                    let fd = new FormData()
+                    let self = this;
+                    fd.append('image', img)
+                    fd.append('user', this.user)
+                    axios.post('{% url 'chat_api:list-create-message' %}', fd)
+                        .then(response => {
+                            console.log(self.messages, response.data)
+                            self.messages.push(response.data)
                         })
                 },
                 deleteMessage(id) {

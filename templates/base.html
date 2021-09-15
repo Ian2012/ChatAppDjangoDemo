@@ -23,6 +23,10 @@
 
 		<script src="{% static 'vue.js' %}"></script>
 		<script src="{% static 'axios.min.js' %}"></script>
+		<script>
+			axios.defaults.xsrfHeaderName = "X-CSRFToken"
+			axios.defaults.xsrfCookieName = "csrftoken"
+		</script>
 		{% block scripts %}
 		{% endblock %}
 	</body>
