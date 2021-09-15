@@ -3,5 +3,42 @@
 	Login |
 {% endblock %}
 {% block content %}
+	<h1>Welcome!</h1>
+	<hr>
+	<h2>Chat</h2>
+	<div class="container">
+		<h3>Lastest messages</h3>
+		{% for message in last_messages %}
+			<p><strong>
+				{% if message.user == request.user %}
+					Me
+				{% else %}
+					{{ message.user.username }}
+				{% endif %}
+			</strong>
+				at {{ message.timestamp }}
+			</p>
+
+			<img src="{{ message.image.url }}" alt="Image here >.<" height="64">
+			<hr>
+
+
+		{% empty %}
+			<p>There are no messages :(</p>
+		{% endfor %}
+
+
+		<form method="post">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<button type="submit">Send</button>
+		</form>
+	</div>
+	<hr>
+	<h2>Users</h2>
+
+	{% for user in users %}
+		{{ user.username }} | {{ user.last_login }}
+	{% endfor %}
 
 {% endblock %}
