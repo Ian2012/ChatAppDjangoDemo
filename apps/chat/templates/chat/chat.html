@@ -10,8 +10,11 @@
 		<div class="container">
 			<h3>Lastest messages</h3>
 			<div class="message" v-for="message in messages">
-				<p v-if="message.username == username">Me at [[message.timestamp]]</p>
-				<p v-else="">[[message.username]] at [[message.timestamp]]</p>
+				<p>
+					<b v-if="message.username == username">Me</b>
+					<b v-else="">[[message.username]]</b>at [[message.timestamp]]
+					<button v-if="message.username == username" @click="deleteMessage(message.id)">Eliminar</button>
+				</p>
 				<img :src="message.image" alt="Image here >.<" height="64">
 				<hr>
 			</div>
@@ -65,10 +68,14 @@
                         })
                 },
                 deleteMessage(id) {
-                    console.log("Delete message:", id)
+                    axios.delete('{% url 'chat_api:delete-message' %}/' + id, {
+                        params: {detalle: id}
+                    })
+                        .then(response => {
+                            console.log(response)
+                        })
                 },
             }
         });
-
 	</script>
 {% endblock %}
