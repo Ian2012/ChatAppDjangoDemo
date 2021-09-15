@@ -18,11 +18,11 @@
 			</strong>
 				at {{ message.timestamp }}
 			</p>
-
 			<img src="{{ message.image.url }}" alt="Image here >.<" height="64">
+			{% if message.user == request.user %}
+				<button>Eliminar</button>
+			{% endif %}
 			<hr>
-
-
 		{% empty %}
 			<p>There are no messages :(</p>
 		{% endfor %}
