@@ -1,5 +1,8 @@
-.container{
+#container{
     height: 300px;
     width: 300px;
     overflow: scroll;
+}
+.message{
+    transition: 0.2s;
 }
