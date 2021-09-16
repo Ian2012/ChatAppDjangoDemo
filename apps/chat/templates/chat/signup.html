@@ -3,9 +3,11 @@
 	Signup |
 {% endblock %}
 {% block content %}
-	<form method="post">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<button type="submit">Register</button>
-	</form>
+	<div class="p-3 form-group">
+		<form method="post">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<button type="submit" class="btn btn-primary">Register</button>
+		</form>
+	</div>
 {% endblock %}

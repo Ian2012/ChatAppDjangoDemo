@@ -1,8 +1,8 @@
 #container{
-    height: 300px;
-    width: 300px;
-    overflow: scroll;
+    height: 400px;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
-.message{
-    transition: 0.2s;
+.my-container{
+    margin: 0 auto;
 }

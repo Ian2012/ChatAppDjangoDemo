@@ -1,34 +1,29 @@
 {% extends 'base.html' %}
 {% block title %}
-	Login |
+	Chat |
 {% endblock %}
 {% block content %}
-	<h1>Welcome!</h1>
-	<hr>
-	<div id="chatapp">
-		<h2>Chat</h2>
-		<h3>Lastest messages</h3>
+	<h3>Users </h3>
+	{% for user in users %}
+		{{ user.username }} | {{ user.last_login }}
+	{% endfor %}
+	<div id="chatapp" class="">
+		<h3 class="text-center">Chat</h3>
+		<h4>Lastest messages</h4>
 		<div id="container">
-
 			<div class="message" v-for="message in messages">
 				<p>
 					<b v-if="message.username == username">Me</b>
 					<b v-else="">[[message.username]]</b> at [[message.timestamp]]
 					<button v-if="message.username == username" @click="deleteMessage(message.id)">Eliminar</button>
 				</p>
-				<img :src="message.image" alt="Image here >.<" height="64">
+				<img :src="message.image" class="img-responsive" alt="Image here >.<" height="256">
 				<hr>
 			</div>
 			<div id="bottom"></div>
 		</div>
 		<input type="file" @change="uploadImage" name="image" id="image" accept="image/*">
 	</div>
-
-	<hr>
-	<h2>Users </h2>
-	{% for user in users %}
-		{{ user.username }} | {{ user.last_login }}
-	{% endfor %}
 {% endblock %}
 
 {% block scripts %}
