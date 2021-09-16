@@ -76,8 +76,14 @@
                                 'username': response.data.username,
                                 'image': response.data.image,
                                 'timestamp': response.data.timestamp,
+                                'type': 'chat_message'
                             }))
                         })
+                },
+                updateMessages(id) {
+                    this.messages = this.messages.filter(function (value, index, arr) {
+                        return value.id != id
+                    });
                 },
                 deleteMessage(id) {
                     let self = this;
@@ -85,9 +91,10 @@
                         params: {detalle: id}
                     })
                         .then(response => {
-                            self.messages = self.messages.filter(function (value, index, arr) {
-                                return value.id != id
-                            });
+                            self.chatSocket.send(JSON.stringify({
+                                'type': 'delete_message',
+                                'id': id,
+                            }))
                         })
                 },
                 scrollToElement() {
@@ -103,9 +110,13 @@
                     //Capturar los mensajes
                     this.chatSocket.onmessage = function (e) {
                         const data = JSON.parse(e.data);
-                        console.log(data)
-                        data.timestamp = new Date(data.timestamp).toLocaleString()
-                        self.messages.push(data)
+                        if (data.type === 'chat_message') {
+                            data.timestamp = new Date(data.timestamp).toLocaleString()
+                            self.messages.push(data)
+                        } else {
+                            self.updateMessages(data.id)
+                        }
+
                     }
                     this.chatSocket.onclose = function (e) {
                         console.error('Chat socket closed unexpectedly')
