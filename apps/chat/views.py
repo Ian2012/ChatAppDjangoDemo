@@ -1,10 +1,10 @@
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views import generic
 
 from apps.chat.forms import UserRegistrationForm
-from apps.chat.models import Message
 
 
 class Chat(LoginRequiredMixin, generic.TemplateView):
@@ -16,7 +16,7 @@ class Chat(LoginRequiredMixin, generic.TemplateView):
         context = super(Chat, self).get_context_data(**kwargs)
         users = User.objects.filter(is_superuser=False)
         context['users'] = users
-        context['last_messages'] = Message.objects.all()[0:25]
+        context['roomName'] = settings.ROOM_NAME
         return context
 
 

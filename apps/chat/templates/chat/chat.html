@@ -7,8 +7,9 @@
 	<hr>
 	<div id="chatapp">
 		<h2>Chat</h2>
+		<h3>Lastest messages</h3>
 		<div class="container">
-			<h3>Lastest messages</h3>
+
 			<div class="message" v-for="message in messages">
 				<p>
 					<b v-if="message.username == username">Me</b>
@@ -19,7 +20,7 @@
 				<hr>
 			</div>
 		</div>
-	<input type="file" @change="uploadImage" name="image" id="image" accept="image/*">
+		<input type="file" @change="uploadImage" name="image" id="image" accept="image/*">
 	</div>
 
 	<hr>
@@ -38,11 +39,16 @@
                 return {
                     messages: {},
                     username: '{{ request.user.username }}',
-                    user: {{ request.user.id }}
+                    user: {{ request.user.id }},
+                    chatSocket: new WebSocket(
+                        'ws://' + window.location.host + '/ws/chat/' + '{{ roomName }}' + '/'
+                    )
                 }
             },
             mounted() {
+                this.webSocketConfiguration()
                 this.loadMessages()
+
             },
             methods: {
                 loadMessages() {
@@ -53,6 +59,7 @@
                             self.messages.forEach(function (value, index) {
                                 self.messages[index].timestamp = new Date(self.messages[index].timestamp).toLocaleString()
                             });
+                            self.scrollToElement()
                         })
                 },
                 uploadImage(e) {
@@ -63,9 +70,13 @@
                     fd.append('user', this.user)
                     axios.post('{% url 'chat_api:list-create-message' %}', fd)
                         .then(response => {
-                            console.log(self.messages, response.data)
-							response.data.timestamp = new Date(response.data.timestamp).toLocaleString()
-                            self.messages.push(response.data)
+                            self.chatSocket.send(JSON.stringify({
+                                'id': response.data.id,
+                                'user': response.data.user,
+                                'username': response.data.username,
+                                'image': response.data.image,
+                                'timestamp': response.data.timestamp,
+                            }))
                         })
                 },
                 deleteMessage(id) {
@@ -78,6 +89,27 @@
                                 return value.id != id
                             });
                         })
+                },
+                scrollToElement() {
+                    let container = this.$el.querySelector(".container");
+                    container.scrollTop = container.scrollHeight;
+
+                    if (container) {
+                        container.scrollIntoView({behavior: 'smooth'});
+                    }
+                },
+                webSocketConfiguration() {
+                    let self = this
+                    //Capturar los mensajes
+                    this.chatSocket.onmessage = function (e) {
+                        const data = JSON.parse(e.data);
+                        console.log(data)
+                        data.timestamp = new Date(data.timestamp).toLocaleString()
+                        self.messages.push(data)
+                    }
+                    this.chatSocket.onclose = function (e) {
+                        console.error('Chat socket closed unexpectedly')
+                    }
                 },
             }
         });
