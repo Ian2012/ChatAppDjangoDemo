@@ -1,6 +1,6 @@
-#ChatApp using Django channels
+# ChatApp using Django channels
 
-##Installation
+## Installation
 Download public repo from https://github.com/Ian2012/ChatAppDjangoDemo
 
 - Unzip the project.
